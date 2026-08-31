@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiyat Teklifi Oluşturucu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/doc.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SOL PANEL ============ -->
+  <aside class="sidebar">
+    <header class="brand">
+      <div class="brand-mark">FT</div>
+      <div class="brand-txt">
+        <strong>Fiyat Teklifi</strong>
+        <span>Teklif Yönetim Paneli</span>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab is-active" data-pane="teklif">Teklif</button>
+      <button class="tab" data-pane="firma">Firma</button>
+      <button class="tab" data-pane="referans">Referans</button>
+      <button class="tab" data-pane="kayitli">Kayıtlı</button>
+    </nav>
+
+    <div class="panes">
+
+      <!-- ---------- TEKLİF (DİNAMİK) ---------- -->
+      <section class="pane is-active" data-pane="teklif">
+
+        <div class="group">
+          <div class="group-title">
+            <span>Teklif Bilgileri</span>
+            <button class="mini" id="fixCounter" title="Bir sonraki teklif numarasını ayarla">Sayaç</button>
+          </div>
+          <div class="row-2">
+            <label class="fld"><span>Teklif Sıra No</span><input id="q_no" type="text" placeholder="otomatik"></label>
+            <label class="fld"><span>Tarih</span><input id="q_date" type="date"></label>
+          </div>
+          <label class="fld"><span>Son Geçerlilik Tarihi</span><input id="q_valid" type="date"></label>
+          <p class="hint" id="noHint"></p>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Müşteri</div>
+          <label class="fld"><span>Kime</span><input id="q_to" type="text" placeholder="Ad Soyad"></label>
+          <label class="fld"><span>Başlık</span><input id="q_subject" type="text" placeholder="İlgili kişiler / konu"></label>
+          <label class="fld"><span>Şirket Adı</span><input id="q_customerCompany" type="text" placeholder="(varsa)"></label>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Proje</div>
+          <label class="fld"><span>Proje Başlığı</span><input id="q_projectTitle" type="text"></label>
+          <label class="fld"><span>Proje Açıklaması</span><textarea id="q_projectDesc" rows="3"></textarea></label>
+        </div>
+
+        <div class="group">
+          <div class="group-title">
+            <span>Kalemler</span>
+            <button class="mini" id="addItem">+ Satır</button>
+          </div>
+          <div class="items-head">
+            <span>Açıklama</span><span>Mik.</span><span>Birim</span><span>Fiyat</span><span></span>
+          </div>
+          <div id="itemList" class="items-list"></div>
+          <p class="hint">Maliyet = Miktar × Birim Fiyat olarak otomatik hesaplanır.</p>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span>Toplam Ayarları</span></div>
+          <div class="row-2">
+            <label class="fld"><span>İndirim (%)</span><input id="q_discount" type="number" min="0" max="100" step="0.01" value="0"></label>
+            <label class="fld"><span>KDV (%)</span><input id="q_vat" type="number" min="0" max="100" step="0.01" value="20"></label>
+          </div>
+          <label class="chk"><input id="q_vatOn" type="checkbox"><span>KDV ekle (kapalıyken toplam KDV'siz)</span></label>
+          <label class="chk"><input id="q_showEmptyRows" type="checkbox" checked><span>Tabloyu boş satırlarla doldur</span></label>
+
+          <div class="sum" id="sumBox"></div>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span>Not</span></div>
+          <label class="fld"><span>Teklif Notu (tablo altı)</span><textarea id="q_note" rows="2" placeholder="Ödeme koşulları, teslim süresi..."></textarea></label>
+        </div>
+      </section>
+
+      <!-- ---------- FİRMA (STATİK) ---------- -->
+      <section class="pane" data-pane="firma">
+        <p class="pane-lead">Bu bölüm her teklifte aynı kalır. Bir kez doldurun; değişiklikler anında kaydedilir.</p>
+
+        <div class="group">
+          <div class="group-title"><span>Kimlik</span></div>
+          <label class="fld"><span>Üst Bant Yazısı</span><input id="c_headline" type="text"></label>
+          <label class="fld"><span>Belge Başlığı</span><input id="c_doctitle" type="text" placeholder="FİYAT TEKLİFİ"></label>
+          <div class="fld">
+            <span>Logo</span>
+            <div class="logo-box">
+              <img id="c_logoPreview" alt="" class="logo-prev">
+              <div class="logo-actions">
+                <label class="btn btn-ghost">Görsel Seç<input id="c_logo" type="file" accept="image/*" hidden></label>
+                <button class="btn btn-ghost danger" id="c_logoClear">Kaldır</button>
+              </div>
+            </div>
+          </div>
+          <div class="fld">
+            <span>Logo Boyutu</span>
+            <div class="range-row">
+              <input id="c_logoSize" type="range" min="15" max="70" step="1">
+              <span class="range-val" id="c_logoSizeVal">34 mm</span>
+            </div>
+          </div>
+          <label class="fld"><span>Logo Altı Slogan (satır başına bir madde)</span><textarea id="c_taglines" rows="3"></textarea></label>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span>İletişim</span></div>
+          <label class="fld"><span>Telefon</span><input id="c_phone" type="text"></label>
+          <label class="fld"><span>Adres</span><textarea id="c_address" rows="2"></textarea></label>
+          <label class="fld"><span>E-posta</span><input id="c_email" type="text"></label>
+          <label class="fld"><span>Web Sitesi</span><input id="c_website" type="text"></label>
+        </div>
+
+        <div class="group">
+          <div class="group-title">
+            <span>Sosyal Medya</span>
+            <button class="mini" id="addSocial">+ Hesap</button>
+          </div>
+          <div id="socialList" class="stack"></div>
+          <p class="hint">Belgede ikonun yanında adresin son bölümü görünür:
+          <code>instagram.com/oren-muhendislik</code> &rarr; <b>oren-muhendislik</b>.
+          Bağlantılar PDF içinde tıklanabilir olur.</p>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span>İmza / Kapanış</span></div>
+          <label class="fld"><span>Teşekkür Satırı 1</span><input id="c_thanks1" type="text"></label>
+          <label class="fld"><span>Teşekkür Satırı 2</span><input id="c_thanks2" type="text"></label>
+          <label class="fld"><span>Kapanış</span><input id="c_regards" type="text" placeholder="Saygılarımla,"></label>
+          <label class="fld"><span>İmza Adı</span><input id="c_signature" type="text"></label>
+        </div>
+
+        <div class="group">
+          <div class="group-title"><span>Görünüm</span></div>
+          <div class="fld"><span>Vurgu Rengi</span>
+            <div class="color-row">
+              <input id="c_accent" type="color">
+              <input id="c_accentHex" type="text" spellcheck="false">
+            </div>
+          </div>
+          <label class="fld"><span>Para Birimi Simgesi</span><input id="c_currency" type="text" maxlength="4"></label>
+        </div>
+      </section>
+
+      <!-- ---------- REFERANSLAR ---------- -->
+      <section class="pane" data-pane="referans">
+        <p class="pane-lead">Belgenin sol alt köşesindeki referans logoları.</p>
+        <div class="group">
+          <label class="fld"><span>Bölüm Başlığı</span><input id="r_title" type="text" placeholder="Referanslarımız"></label>
+          <div class="row-2">
+            <label class="fld"><span>Sütun Sayısı</span><input id="r_cols" type="number" min="2" max="6" value="4"></label>
+            <label class="fld"><span>Logo Boyutu (px)</span><input id="r_size" type="number" min="14" max="60" value="26"></label>
+          </div>
+          <label class="chk"><input id="r_show" type="checkbox" checked><span>Referans bölümünü göster</span></label>
+        </div>
+        <div class="group">
+          <div class="group-title">
+            <span>Logolar</span>
+            <label class="mini">+ Logo Ekle<input id="addRefs" type="file" accept="image/*" multiple hidden></label>
+          </div>
+          <div id="refList" class="ref-grid"></div>
+          <p class="hint">Birden fazla dosya seçebilirsiniz. Sıralamayı oklarla değiştirin.</p>
+        </div>
+      </section>
+
+      <!-- ---------- KAYITLI TEKLİFLER ---------- -->
+      <section class="pane" data-pane="kayitli">
+        <div class="group">
+          <div class="group-title"><span>Kayıtlı Teklifler</span></div>
+          <input id="searchQuotes" class="search" type="search" placeholder="Müşteri veya teklif no ile ara...">
+          <div id="quoteList" class="quote-list"></div>
+        </div>
+        <div class="group">
+          <div class="group-title"><span>Yedekleme</span></div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="exportBtn">Dışa Aktar</button>
+            <label class="btn btn-ghost">İçe Aktar<input id="importFile" type="file" accept="application/json" hidden></label>
+          </div>
+          <p class="hint">Firma bilgileri, referanslar ve tüm teklifler tek bir .json dosyasına yazılır.</p>
+          <p id="storageInfo" class="hint"></p>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="sidebar-foot">
+      <button class="btn btn-primary" id="saveQuote">Teklifi Kaydet</button>
+      <button class="btn btn-ghost" id="newQuote">Yeni</button>
+    </footer>
+  </aside>
+
+  <!-- ============ ÖNİZLEME ============ -->
+  <main class="canvas">
+    <div class="toolbar">
+      <div class="tool-group">
+        <button class="tbtn" id="zoomOut" title="Uzaklaş">&minus;</button>
+        <span class="zoom-val" id="zoomVal">100%</span>
+        <button class="tbtn" id="zoomIn" title="Yakınlaş">+</button>
+        <button class="tbtn wide" id="zoomFit" title="Ekrana sığdır">Sığdır</button>
+      </div>
+      <div class="tool-status" id="status">Hazır</div>
+      <button class="btn btn-primary" id="printBtn">PDF Olarak Kaydet</button>
+    </div>
+
+    <div class="scroll" id="scroll">
+      <div class="page-wrap" id="pageWrap">
+        <div class="page" id="page"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/store.js"></script>
+<script src="js/doc.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+/* ==========================================================
+   A4 teklif belgesi — ekranda onizleme + yazdirma (PDF)
+   Tum olculer mm/pt cinsinden, cikti birebir A4.
+   ========================================================== */
+
+.page{
+  --acc:#1b5c9c;
+  --doc-ink:#1d2733;
+  --doc-soft:#5f6b7a;
+  --doc-line:#aab4c0;
+  --doc-line-soft:#ccd4dd;
+
+  width:210mm;
+  min-height:297mm;
+  padding:13mm 12mm 10mm;
+  background:#fff;
+  color:var(--doc-ink);
+  font-family:"Source Sans 3", "Segoe UI", Arial, sans-serif;
+  font-size:8.6pt;
+  line-height:1.35;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+/* ---------- Ust bant ---------- */
+.d-headline{
+  font-size:15pt;
+  font-weight:700;
+  letter-spacing:.02em;
+  color:var(--acc);
+  text-transform:uppercase;
+  padding-bottom:1.5mm;
+}
+.d-rule{
+  height:.7mm;
+  background:var(--acc);
+  margin-bottom:6mm;
+}
+
+/* ---------- Govde: sol ray + ana kolon ---------- */
+.d-body{
+  flex:1;
+  display:grid;
+  grid-template-columns:52mm 1fr;
+  column-gap:7mm;
+  min-height:0;
+}
+
+.d-rail{ display:flex; flex-direction:column; }
+.d-main{ display:flex; flex-direction:column; min-width:0; }
+
+/* ---------- Sol ray ---------- */
+.d-title{
+  font-size:16pt;
+  font-weight:700;
+  color:var(--acc);
+  line-height:1.05;
+  margin-bottom:2mm;
+  letter-spacing:.01em;
+}
+.d-meta{ margin-bottom:4mm; }
+.d-meta div{ margin-bottom:.8mm; }
+.d-meta b{ font-weight:600; }
+.d-meta .val{ color:var(--acc); font-weight:600; }
+
+.d-contact{ margin-bottom:4mm; }
+.d-contact div{
+  margin-bottom:1.6mm;
+  color:var(--acc);
+  word-break:break-word;
+  line-height:1.3;
+}
+.d-contact a{ color:var(--acc); text-decoration:none; }
+.d-contact .plain{ color:var(--doc-soft); }
+
+/* Sosyal medya: dikey liste, ikon + kullanici adi, PDF'te tiklanabilir */
+.d-social{ display:flex; flex-direction:column; gap:2.2mm; margin-bottom:4mm; }
+.d-social .s-item{
+  display:flex;
+  align-items:center;
+  gap:2.2mm;
+  text-decoration:none;
+  color:var(--acc);
+  font-size:8.2pt;
+  line-height:1.2;
+}
+.d-social .s-icon{
+  width:6.6mm; height:6.6mm;
+  border-radius:1.5mm;
+  display:grid; place-items:center;
+  flex:none;
+}
+.d-social svg{ width:4.2mm; height:4.2mm; fill:#fff; }
+.d-social .s-text{ word-break:break-word; }
+
+.d-rail-spacer{ flex:1; min-height:6mm; }
+
+/* ---------- Referanslar ---------- */
+.d-refs{ margin-top:auto; padding-top:4mm; }
+.d-refs-title{
+  font-size:6.6pt;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--doc-soft);
+  margin-bottom:2mm;
+}
+.d-refs-grid{
+  display:grid;
+  gap:2mm;
+  align-items:center;
+}
+.d-refs-grid img{
+  width:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* ---------- Ana kolon: musteri / proje / logo ---------- */
+.d-top{
+  display:grid;
+  grid-template-columns:1fr 34mm;
+  column-gap:5mm;
+  margin-bottom:6mm;
+}
+.d-info div{ margin-bottom:1.1mm; }
+.d-info .lbl{ font-weight:600; color:var(--doc-ink); }
+.d-info .txt{ color:var(--doc-ink); }
+.d-info .block{ margin-top:3.5mm; }
+.d-info .desc{
+  white-space:pre-wrap;
+  color:var(--doc-soft);
+  line-height:1.4;
+}
+
+.d-logo{ text-align:right; }
+.d-logo img{
+  max-width:34mm;
+  max-height:31mm;
+  object-fit:contain;
+  display:inline-block;
+}
+.d-taglines{
+  margin-top:2mm;
+  font-size:7.2pt;
+  line-height:1.45;
+  color:var(--doc-soft);
+  text-align:right;
+}
+
+/* ---------- Kalem tablosu ---------- */
+.d-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.d-table th{
+  background:var(--acc);
+  color:#fff;
+  font-weight:600;
+  font-size:8.4pt;
+  text-align:left;
+  padding:1.8mm 2mm;
+  border:.25mm solid var(--acc);
+}
+.d-table td{
+  border:.25mm solid var(--doc-line-soft);
+  padding:1.6mm 2mm;
+  vertical-align:top;
+  height:6.2mm;
+}
+.d-table .c-qty, .d-table .c-price, .d-table .c-cost{ text-align:right; }
+.d-table th.c-qty, .d-table th.c-price, .d-table th.c-cost{ text-align:right; }
+.d-table .desc-cell{ white-space:pre-wrap; word-break:break-word; }
+.d-table tr.empty td{ height:6.2mm; }
+
+.d-table .t-label{
+  border:.25mm solid var(--doc-line-soft);
+  text-align:right;
+  font-weight:600;
+  padding:1.6mm 2mm;
+}
+.d-table .t-value{
+  border:.25mm solid var(--doc-line-soft);
+  text-align:right;
+  font-weight:600;
+  padding:1.6mm 2mm;
+  white-space:nowrap;
+}
+.d-table .t-blank{ border:0; }
+.d-table tr.grand .t-label,
+.d-table tr.grand .t-value{
+  background:#f2f6fa;
+  color:var(--acc);
+  font-weight:700;
+}
+
+/* ---------- Kapanis ---------- */
+.d-note{
+  margin-top:2.5mm;
+  font-size:8pt;
+  color:var(--doc-soft);
+  white-space:pre-wrap;
+  line-height:1.4;
+}
+.d-closing{ margin-top:4mm; }
+.d-closing div{ margin-bottom:2.2mm; }
+.d-closing .sign{ font-weight:600; margin-top:4mm; }
+
+/* ---------- Alt cizgi + sayfa no ---------- */
+.d-foot{
+  margin-top:auto;
+  padding-top:5mm;
+}
+.d-foot-rule{
+  border-top:.3mm solid var(--doc-line);
+  padding-top:1.5mm;
+  text-align:right;
+  font-size:7.5pt;
+  color:var(--doc-soft);
+}
+
+/* ==========================================================
+   YAZDIRMA
+   ========================================================== */
+@page{
+  size:A4 portrait;
+  margin:0;
+}
+
+@media print{
+  html, body{
+    height:auto;
+    overflow:visible;
+    background:#fff;
+  }
+  .sidebar, .toolbar, .toast{ display:none !important; }
+  .app{ display:block; height:auto; }
+  .canvas{ display:block; background:#fff; }
+  .scroll{
+    display:block;
+    overflow:visible;
+    padding:0;
+  }
+  .page-wrap{
+    width:auto !important;
+    height:auto !important;
+  }
+  .page{
+    transform:none !important;
+    box-shadow:none !important;
+    width:210mm;
+    /* 297mm yerine 295mm: tarayici yuvarlamasindan dogan bos ikinci
+       sayfayi onler, icerik tastiginda sayfa yine de bolunur */
+    min-height:295mm;
+    margin:0;
+  }
+  .d-table{ page-break-inside:auto; }
+  .d-table tr{ page-break-inside:avoid; }
+  *{
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+}

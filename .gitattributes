@@ -1,0 +1,9 @@
+# Varsayilan: satir sonlarini Git yonetsin
+* text=auto
+
+# Kabuk betikleri LF kalmali, yoksa macOS'ta "bad interpreter" hatasi verir
+*.command text eol=lf
+*.sh       text eol=lf
+
+# Windows toplu is dosyalari CRLF olmali
+*.bat      text eol=crlf

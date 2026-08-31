@@ -1,0 +1,14 @@
+# Gercek teklif verileri: musteri adlari, fiyatlar, logolar.
+# Uygulama ilk calistiginda kendisi olusturur — depoya girmemeli.
+data/
+
+# Isletim sistemi artiklari
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Duzenleyici / arac
+.vscode/
+.idea/
+node_modules/
+*.log
